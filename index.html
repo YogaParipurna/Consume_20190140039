@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap5.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link href="index.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+
+    <title>Bagasi Hidroponik</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Bagasi Hidroponik</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collaps" data-bs-target="navbarNavAltMarkup" arria-current="page">
+                    <span class="navbar-toggler-icon"></span>
+    </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="container">
+                <input class="form-control" id="myInput" type="text" placeholder="Search..">
+            </div>
+        </div>
+        <div class="navbar-nav ms-auto">
+            <button type="button" class="btn btn-secondary" onclick="showUserCreateBox()">Add Costumer</button>
+        </div>
+    </div>
+    </div>
+    </nav>
+
+    <div class="table-dark">
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nama Costumer</th>
+                        <th scope="col">Asal Kontak</th>
+                        <th scope="col">Nomer Hp</th>
+                        <th scope="col">Fitur</th>
+                        <th scope="col"></th>
+                        
+                </tr>
+            </thead>
+            <tbody id="mytable">
+                <tr>
+                    <th scope="row" colspan="5">Loading</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function() {
+            $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#mytable tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+        function loadTable() {
+            const xhttp = new XMLHttpRequest();
+            xhttp.open("GET", "http://127.0.0.1:3315/hidroponik");
+            xhttp.send();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText);
+                    var trHtml = '';
+                    const objects = JSON.parse(this.responseText);
+                    for (let object of objects) {
+                        trHtml += '<tr>';
+                        trHtml += '<td>' + object['id'] + '</td>';
+                        trHtml += '<td>' + object['namaCustomer'] + '</td>';
+                        trHtml += '<td>' + object['asalKontak'] + '</td>';
+                        trHtml += '<td>' + object['nomerHp'] + '</td>';
+                        trHtml += '<td><button type="button" class="btn btn-success btn-sm text-white" onclick = "showUserEditBox(' + object['id'] + ')"> Edit  </button></td>';
+                        trHtml += '<td><button type="button" class="btn btn-danger btn-sm" onclick="userDelete(' + object['id'] + ')"> Delete</button></td>';
+                        trHtml += '</tr>';
+                    }
+                    document.getElementById("mytable").innerHTML = trHtml;
+                }
+            };
+        }
+        loadTable();
+
+        function showUserCreateBox() {
+            Swal.fire({
+                title: 'Tambah Costumer',
+                html: '<input id="id" class="swal2-input" placeholder="id">' +
+                    '<input id="namaCustomer" class="swal2-input" placeholder="Nama Customer">' +
+                    '<input id="asalKontak" class="swal2-input" placeholder="Asal Kontak">' +
+                    '<input id="nomerHp" class="swal2-input" placeholder="Nomer Hp">',
+                focusConfirm: false,
+                preConfirm: () => {
+                    userCreate();
+                }
+            })
+        }
+
+        function userCreate() {
+            const id = document.getElementById("id").value;
+            const namaCustomer = document.getElementById("namaCustomer").value;
+            const asalKontak = document.getElementById("asalKontak").value;
+            const nomerHp = document.getElementById("nomerHp").value;
+
+            const xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "http://127.0.0.1:3315/hidroponik");
+            xhttp.setRequestHeader("Content-Type", "application/json;");
+            xhttp.send(JSON.stringify({
+                "id": id,
+                "namaCustomer": namaCustomer,
+                "asalKontak": asalKontak,
+                "nomerHp": nomerHp
+            }));
+            xhttp.onreadystatechange = function() {
+                if (this.status == 200) {
+                    const objects = JSON.parse(this.responseText);
+                    loadTable.reload();
+                    Swal.fire(objects['Sukses']);
+                    loadTable.reload(); 
+                }
+            }
+        }
+
+        function showUserEditBox(id) {
+            console.log(id);
+            const xhttp = new XMLHttpRequest();
+            xhttp.open("GET", "http://127.0.0.1:3315/hidroponik/" + id);
+            xhttp.send();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    const objects = JSON.parse(this.responseText);
+                    const user = objects["user"];
+                    console.log(user);
+                    Swal.fire({
+                        title: 'Edit Book',
+                        html: '<input id="id" type="hidden" value="' + objects['id'] + '">' +
+                            '<input id="namaCustomer" class="swal2-input" placeholder="Nama Customer" value="' + objects['namaCustomer'] + '">' +
+                            '<input id="asalKontak" class="swal2-input" placeholder="Asal Kontak" value="' + objects['asalKontak'] + '">' +
+                            '<input id="nomerHp" class="swal2-input" placeholder="Nomer HP" value="' + objects['nomerHp'] + '">',
+                        focusConfirm: false,
+                        preConfirm: () => {
+                            userEdit();
+                        }
+                    })
+                }
+            };
+        }
+
+        function userEdit() {
+            const id = document.getElementById("id").value;
+            const namaCustomer = document.getElementById("namaCustomer").value;
+            const asalKontak = document.getElementById("asalKontak").value;
+            const nomerHp = document.getElementById("nomerHp").value;
+
+            const xhttp = new XMLHttpRequest();
+            xhttp.open("PUT", "http://127.0.0.1:3315/hidroponik/updatehidroponik");
+            xhttp.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+            xhttp.send(JSON.stringify({
+                "id": id,
+                "namaCustomer": namaCustomer,
+                "asalKontak": asalKontak,
+                "nomerHp": nomerHp
+            }));
+            xhttp.onreadystatechange = function() {
+                if (this.status == 200) {
+                    const objects = JSON.parse(this.responseText);
+                    Swal.fire(objects['message']);
+                    loadTable();
+                }
+            }
+        }
+
+        function showDeleteBox() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                    )
+                }
+            })
+        }
+
+        function userDelete(id) {
+
+            const xhttp = new XMLHttpRequest();
+            xhttp.open("DELETE", "http://127.0.0.1:3315/hidroponik/" + id);
+            xhttp.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+            xhttp.send(JSON.stringify({
+                "id": id
+            }));
+            xhttp.onreadystatechange = function() {
+                var del = confirm("Are you sure you want to delete this record?");
+                if (del == true, this.status == 200) {
+
+                    const objects = JSON.parse(this.responseText);
+                    Swal.fire(objects["message"]);
+                    loadTable();
+                } else {
+                    return false;
+
+                }
+
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+</body>
+
+</html>

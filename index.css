@@ -1,0 +1,21 @@
+.data {
+	display: none;
+}
+
+.g-signin2 {
+    position: center;
+    margin-top: -60px;
+}
+
+.bg-mynav {
+    background-color: #01ff62;
+}
+
+body {
+    font-size: 1.25rem;
+    background-color: #f6f8fa;
+}
+
+td {
+    line-height: 3rem;
+}
