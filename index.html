@@ -5,21 +5,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="433363468994-ql3l2vbqh9ft45nkfik5fbkmstpbpstt.apps.googleusercontent.com">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap5.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link href="index.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    
-
     <title>Bagasi Hidroponik</title>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
+            <a class="navbar-brand" href="Login.html">Login</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collaps" data-bs-target="navbarNavAltMarkup" arria-current="page">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <a class="navbar-brand" href="#">Bagasi Hidroponik</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collaps" data-bs-target="navbarNavAltMarkup" arria-current="page">
-                    <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collaps" data-bs-target="navbarNavAltMarkup" arria-current="page">
+                <span class="navbar-toggler-icon"></span>
+            </button>
     </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="container">
@@ -29,9 +33,6 @@
         <div class="navbar-nav ms-auto">
             <button type="button" class="btn btn-secondary" onclick="showUserCreateBox()">Add Costumer</button>
         </div>
-        <div class="navbar-nav ms-3">
-            <a href="ok.html" class="btn btn-danger btn-sm" onclick="signOut();" style="font-size: 17px;">Log Out</a>
-          </div>
     </div>
     </div>
     </nav>
@@ -172,7 +173,7 @@
                     const user = objects["user"];
                     console.log(user);
                     Swal.fire({
-                        title: 'Edit Book',
+                        title: 'Edit Costumer',
                         html: '<input id="id" type="hidden" value="' + objects['id'] + '">' +
                             '<input id="namaCustomer" class="swal2-input" placeholder="Nama Customer" value="' + objects['namaCustomer'] + '">' +
                             '<input id="asalKontak" class="swal2-input" placeholder="Asal Kontak" value="' + objects['asalKontak'] + '">' +
@@ -249,43 +250,16 @@
         }
         
     </script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>
+
 <footer class="bg-dark text-center text-white">
     <!-- Grid container -->
     <div class="container p-4 pb-0">
       <!-- Section: Social media -->
       <section class="mb-4">
-        <!-- Facebook -->
-        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
-          ><i class="fab fa-facebook-f"></i
-        ></a>
-  
-        <!-- Twitter -->
-        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
-          ><i class="fab fa-twitter"></i
-        ></a>
-  
-        <!-- Google -->
-        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
-          ><i class="fab fa-google"></i
-        ></a>
-  
-        <!-- Instagram -->
-        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
-          ><i class="fab fa-instagram"></i
-        ></a>
-  
-        <!-- Linkedin -->
-        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
-          ><i class="fab fa-linkedin-in"></i
-        ></a>
-  
-        <!-- Github -->
-        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
-          ><i class="fab fa-github"></i
-        ></a>
       </section>
       <!-- Section: Social media -->
     </div>
@@ -298,5 +272,4 @@
     </div>
     <!-- Copyright -->
   </footer>
-
 </html>
